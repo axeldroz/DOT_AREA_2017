@@ -2,6 +2,7 @@
 using AREA.Models.Entity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -28,7 +29,7 @@ namespace AREA.Controllers
             {
                 using (AreaEntities db = new AreaEntities())
                 {
-                    bool UserValid = db.users.Any(data => data.Email == elem.Email && data.Password == elem.Password);
+                    var UserValid = db.users.Any(data => data.Email == elem.Email && data.Password == elem.Password);
                     if (UserValid)
                     {
                         FormsAuthentication.SetAuthCookie(elem.Email, false);
@@ -39,19 +40,27 @@ namespace AREA.Controllers
             return View(elem);
         }
 
+        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
         }
 
-       [HttpPost]
-       [ValidateAntiForgeryToken]
-       public ActionResult Register(VerifyRegister elem)
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Register(VerifyRegister elem)
         {
             if (ModelState.IsValid)
             {
                 using (AreaEntities db = new AreaEntities())
                 {
+                    var tmp = await db.users.Where(m => m.Email == elem.Email).FirstOrDefaultAsync();
+                    if (tmp != null)
+                    {
+                        ModelState.AddModelError("", "This Email is already taken.");
+                        return View(elem);
+                    }
                     user ToAdd = new user()
                     {
                         Email = elem.Email,
@@ -59,9 +68,9 @@ namespace AREA.Controllers
                         Password = elem.Password
                     };
                     db.users.Add(ToAdd);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                     FormsAuthentication.SetAuthCookie(elem.Email, false);
-                    return Redirect("/login");
+                    return Redirect("/");
                 }
             }
             return View(elem);
