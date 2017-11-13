@@ -1,0 +1,34 @@
+﻿<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Area", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("Accueil", "Index", "Home")</li>
+                <li>@Html.ActionLink("À propos de", "About", "Home")</li>
+                <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    @if (!HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        @Html.ActionLink("Login", "Index", "Login", routeValues: null, htmlAttributes: new { title = "Contact informations" })
+                    }
+                </li>
+                <li>
+                    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        @Html.ActionLink("Logout", "LogOut", "Login", routeValues: null, htmlAttributes: new { title = "Contact informations" })
+
+                    }
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
