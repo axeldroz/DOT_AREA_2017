@@ -14,12 +14,26 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Newtonsoft.Json;
 using Facebook;
+using System.Diagnostics;
 
 namespace AREA.Controllers
 {
     [Authorize]
     public class LoginController : Controller
     {
+        private Uri RedirectUri
+        {
+            get
+            {
+                UriBuilder uriBuilder = new UriBuilder(Request.Url)
+                {
+                    Query = null,
+                    Fragment = null,
+                    Path = Url.Action("FacebookCallback")
+                };
+                return (uriBuilder.Uri);
+            }
+        }
         // GET: Login
         [AllowAnonymous]
         public ActionResult Index()
@@ -29,7 +43,7 @@ namespace AREA.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult Index(VerifyLogin elem)
+        public async Task<ActionResult> Index(VerifyLogin elem)
         {
             if (ModelState.IsValid)
             {
@@ -39,6 +53,8 @@ namespace AREA.Controllers
                     if (UserValid)
                     {
                         FormsAuthentication.SetAuthCookie(elem.Email, false);
+                        var tmp = await db.users.Where(m => m.Email == elem.Email).FirstOrDefaultAsync();
+                        Session["Username"] = tmp.Name;
                         return Redirect("/");
                     }
                 }
@@ -75,6 +91,7 @@ namespace AREA.Controllers
                     };
                     db.users.Add(ToAdd);
                     await db.SaveChangesAsync();
+                    Session["Username"] = elem.Name;
                     FormsAuthentication.SetAuthCookie(elem.Email, false);
                     return Redirect("/");
                 }
@@ -85,55 +102,70 @@ namespace AREA.Controllers
         /// <summary>
         /// Facebook connection
         /// </summary>
-        private Uri RedirectUri
-        {
-            get
-            {
-                UriBuilder uriBuilder = new UriBuilder(Request.Url)
-                {
-                    Query = null,
-                    Fragment = null,
-                    Path = Url.Action("FacebookCallback")
-                };
-                return (uriBuilder.Uri);
-            }
-        }
         [AllowAnonymous]
         public ActionResult Facebook()
         {
             Facebook.FacebookClient fb = new Facebook.FacebookClient();
-            var loginUrl = fb.GetLoginUrl(new{
-                client_id = "793716987456282",
-                client_secret = "d86fd12422cda2da683decc26e0ad48a",
+            var loginUrl = fb.GetLoginUrl(new
+            {
+                client_id = "790703331101924",
+                // client_secret = "d86fd12422cda2da683decc26e0ad48a",
                 redirect_uri = RedirectUri.AbsoluteUri,
                 response_type = "code",
-                scope = "email"});
+                scope = "email,publish_actions"
+            });
             return (Redirect(loginUrl.AbsoluteUri));
         }
-        public ActionResult FacebookCallback(string code)
+
+        [AllowAnonymous]
+        public async Task<ActionResult> FacebookCallback(string code)
         {
             var fb = new Facebook.FacebookClient();
-            dynamic result = fb.Post("oauth/access_token",
+            dynamic result = await fb.PostTaskAsync("oauth/access_token",
                 new
                 {
-                    client_id = "793716987456282",
-                    client_secret = "d86fd12422cda2da683decc26e0ad48a",
+                    client_id = "790703331101924",
+                    client_secret = "555f37fad9618104665ce1c9ada19878",
                     redirect_uri = RedirectUri.AbsoluteUri,
-                    response_type = "code"
-
+                    code = code
                 });
             var accessToken = result.access_token;
-            Session["AccessToken"] = accessToken;
+            Session["FacebookToken"] = accessToken;
             fb.AccessToken = accessToken;
-            dynamic me = fb.Get("me?fields=link,first_name,currency,last_name,email,gender,locale,timezone,verified,picture,age_range");
-            string email = me.email;
-            string lastname = me.last_name;
-            string picture = me.picture.data.url;
-            FormsAuthentication.SetAuthCookie(email, false);
-            return (RedirectToAction("Index", "Home"));
+            dynamic me = await fb.GetTaskAsync("me?fields=link,first_name,currency,last_name,email,gender,locale,timezone,verified,picture,age_range");
+            string _Email = me.email;
+            string _Name = me.first_name + " " + me.last_name;
+            using (AreaEntities db = new AreaEntities())
+            {
+                // If user exists log him.
+                var tmp = await db.users.Where(m => m.Email == _Email).FirstOrDefaultAsync();
+                if (tmp != null)
+                {
+                    Session["Username"] = _Name;
+                    FormsAuthentication.SetAuthCookie(_Email, false);
+                    return (RedirectToAction("Index", "Home"));
+                }
+                // If user doesn't exists, add it to the database with a default password.
+                else
+                {
+                    user ToAdd = new user()
+                    {
+                        Email = _Email,
+                        Name = _Name,
+                        Password = ""
+                    };
+                    db.users.Add(ToAdd);
+                    await db.SaveChangesAsync();
+                    Session["Username"] = _Name;
+                    FormsAuthentication.SetAuthCookie(_Email, false);
+                    return (RedirectToAction("Index", "Home"));
+                }
+            }
         }
         public ActionResult LogOut()
         {
+            Session["FecebookToken"] = null;
+            Session["Username"] = null;
             FormsAuthentication.SignOut();
             return Redirect("/");
         }
@@ -163,8 +195,9 @@ namespace AREA.Controllers
                 OpenAuth.RequestAuthentication(Provider, ReturnUrl);
             }
         }
+
         [AllowAnonymous]
-        public ActionResult ExternalLoginCallback(string returnUrl)
+        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             string ProviderName = OpenAuth.GetProviderNameFromCurrentRequest();
 
@@ -184,7 +217,6 @@ namespace AREA.Controllers
                 }
             }
             GoogleOAuth2Client.RewriteRequest();
-
             var redirectUrl = Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl });
             var retUrl = returnUrl;
             var authResult = OpenAuth.VerifyAuthentication(redirectUrl);
@@ -220,11 +252,8 @@ namespace AREA.Controllers
             {
                 Email = authResult.ExtraData["email"];
             }
-
             if (User.Identity.IsAuthenticated)
             {
-                // User is already authenticated, add the external login and redirect to return url
-                //OpenAuth.AddAccountToExistingUser(ProviderName, ProviderUserId, ProviderUserName, User.Identity.Name);
                 return Redirect(Url.Action("Index", "Home"));
             }
             else
@@ -248,16 +277,12 @@ namespace AREA.Controllers
                     else
                     {
                         db.users.Add(elem);
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
                         FormsAuthentication.SetAuthCookie(Email, false);
                         return Redirect(Url.Action("Index", "Home"));
                     }
                 }
-                //var createResult = OpenAuth.CreateUser(ProviderName, ProviderUserId, ProviderUserName, membershipUserName);
-
-
             }
-            return View();
         }
     }
 }

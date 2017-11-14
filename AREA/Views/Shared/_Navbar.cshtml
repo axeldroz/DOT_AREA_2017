@@ -21,13 +21,13 @@
                         @Html.ActionLink("Login", "Index", "Login", routeValues: null, htmlAttributes: new { title = "Contact informations" })
                     }
                 </li>
-                <li>
-                    @if (HttpContext.Current.User.Identity.IsAuthenticated)
-                    {
-                        @Html.ActionLink("Logout", "LogOut", "Login", routeValues: null, htmlAttributes: new { title = "Contact informations" })
 
-                    }
-                </li>
+                @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    <li> @Html.ActionLink("Hello " + @HttpContext.Current.Session["Username"].ToString(), "")</li>
+                        <li>  @Html.ActionLink("Logout", "LogOut", "Login", routeValues: null, htmlAttributes: new { title = "Contact informations" })</li>
+                }
+
             </ul>
         </div>
     </div>
