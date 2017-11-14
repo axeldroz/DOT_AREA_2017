@@ -1,5 +1,6 @@
 ﻿using AREA.Models;
 using AREA.Models.Entity;
+using DotNetOpenAuth.AspNet.Clients;
 using DotNetOpenAuth.GoogleOAuth2;
 using Microsoft.AspNet.Membership.OpenAuth;
 using System;
@@ -11,6 +12,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Newtonsoft.Json;
+using Facebook;
 
 namespace AREA.Controllers
 {
@@ -77,6 +80,57 @@ namespace AREA.Controllers
                 }
             }
             return View(elem);
+        }
+
+        /// <summary>
+        /// Facebook connection
+        /// </summary>
+        private Uri RedirectUri
+        {
+            get
+            {
+                UriBuilder uriBuilder = new UriBuilder(Request.Url)
+                {
+                    Query = null,
+                    Fragment = null,
+                    Path = Url.Action("FacebookCallback")
+                };
+                return (uriBuilder.Uri);
+            }
+        }
+        [AllowAnonymous]
+        public ActionResult Facebook()
+        {
+            Facebook.FacebookClient fb = new Facebook.FacebookClient();
+            var loginUrl = fb.GetLoginUrl(new{
+                client_id = "793716987456282",
+                client_secret = "d86fd12422cda2da683decc26e0ad48a",
+                redirect_uri = RedirectUri.AbsoluteUri,
+                response_type = "code",
+                scope = "email"});
+            return (Redirect(loginUrl.AbsoluteUri));
+        }
+        public ActionResult FacebookCallback(string code)
+        {
+            var fb = new Facebook.FacebookClient();
+            dynamic result = fb.Post("oauth/access_token",
+                new
+                {
+                    client_id = "793716987456282",
+                    client_secret = "d86fd12422cda2da683decc26e0ad48a",
+                    redirect_uri = RedirectUri.AbsoluteUri,
+                    response_type = "code"
+
+                });
+            var accessToken = result.access_token;
+            Session["AccessToken"] = accessToken;
+            fb.AccessToken = accessToken;
+            dynamic me = fb.Get("me?fields=link,first_name,currency,last_name,email,gender,locale,timezone,verified,picture,age_range");
+            string email = me.email;
+            string lastname = me.last_name;
+            string picture = me.picture.data.url;
+            FormsAuthentication.SetAuthCookie(email, false);
+            return (RedirectToAction("Index", "Home"));
         }
         public ActionResult LogOut()
         {
@@ -205,6 +259,5 @@ namespace AREA.Controllers
             }
             return View();
         }
-
     }
 }
