@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace AREA.Reaction
 {
-    internal class TaskFactory<T1, T2> : Delegate
+    /*internal class TaskFactory<T1, T2> : Delegate
     {
         private Func<string, Task<int>> postOnWall;
 
@@ -11,5 +11,5 @@ namespace AREA.Reaction
         {
             this.postOnWall = postOnWall;
         }
-    }
+    }*/
 }

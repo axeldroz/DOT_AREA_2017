@@ -25,6 +25,7 @@ namespace AREA.Models.Entity
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<action> actions { get; set; }
         public virtual DbSet<user> users { get; set; }
     }
 }

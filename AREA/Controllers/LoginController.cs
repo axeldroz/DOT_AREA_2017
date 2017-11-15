@@ -55,6 +55,7 @@ namespace AREA.Controllers
                         FormsAuthentication.SetAuthCookie(elem.Email, false);
                         var tmp = await db.users.Where(m => m.Email == elem.Email).FirstOrDefaultAsync();
                         Session["Username"] = tmp.Name;
+                        Session["Email"] = tmp.Email;
                         return Redirect("/");
                     }
                 }
@@ -92,6 +93,8 @@ namespace AREA.Controllers
                     db.users.Add(ToAdd);
                     await db.SaveChangesAsync();
                     Session["Username"] = elem.Name;
+                    Session["Email"] = elem.Email;
+
                     FormsAuthentication.SetAuthCookie(elem.Email, false);
                     return Redirect("/");
                 }
@@ -109,10 +112,9 @@ namespace AREA.Controllers
             var loginUrl = fb.GetLoginUrl(new
             {
                 client_id = "790703331101924",
-                // client_secret = "d86fd12422cda2da683decc26e0ad48a",
                 redirect_uri = RedirectUri.AbsoluteUri,
                 response_type = "code",
-                scope = "email,publish_actions"
+                scope = "email"
             });
             return (Redirect(loginUrl.AbsoluteUri));
         }
@@ -142,6 +144,7 @@ namespace AREA.Controllers
                 if (tmp != null)
                 {
                     Session["Username"] = _Name;
+                    Session["Email"] = _Email;
                     FormsAuthentication.SetAuthCookie(_Email, false);
                     return (RedirectToAction("Index", "Home"));
                 }
@@ -157,6 +160,7 @@ namespace AREA.Controllers
                     db.users.Add(ToAdd);
                     await db.SaveChangesAsync();
                     Session["Username"] = _Name;
+                    Session["Email"] = _Email;
                     FormsAuthentication.SetAuthCookie(_Email, false);
                     return (RedirectToAction("Index", "Home"));
                 }
@@ -166,6 +170,7 @@ namespace AREA.Controllers
         {
             Session["FecebookToken"] = null;
             Session["Username"] = null;
+            Session["Email"] = null;
             FormsAuthentication.SignOut();
             return Redirect("/");
         }
@@ -240,6 +245,7 @@ namespace AREA.Controllers
                 {
                     var tmp = await db.users.Where(m => m.Email == Email).FirstOrDefaultAsync();
                     Session["Username"] = tmp.Name;
+                    Session["Email"] = tmp.Email;
                     FormsAuthentication.SetAuthCookie(Email, false);
                     return Redirect(Url.Action("Index", "Home"));
                 }
@@ -281,6 +287,7 @@ namespace AREA.Controllers
                         db.users.Add(elem);
                         await db.SaveChangesAsync();
                         var tmp = await db.users.Where(m => m.Email == Email).FirstOrDefaultAsync();
+                        Session["Email"] = tmp.Email;
                         Session["Username"] = tmp.Name;
                         FormsAuthentication.SetAuthCookie(Email, false);
                         return Redirect(Url.Action("Index", "Home"));

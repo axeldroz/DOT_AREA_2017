@@ -32,7 +32,7 @@ namespace AREA.Action
 
         public void WaitForNothing(Reaction.IAreaReaction react)
         {
-            FacebookClient fb = new FacebookClient("token");
+            FacebookClient fb = new FacebookClient(_token);
 
             fb.GetCompleted +=
                 (o, e) =>

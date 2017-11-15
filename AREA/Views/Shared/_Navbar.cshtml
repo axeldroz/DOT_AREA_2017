@@ -24,7 +24,11 @@
 
                 @if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
-                    <li> @Html.ActionLink("Hello " + @HttpContext.Current.Session["Username"].ToString(), "")</li>
+                    if (@HttpContext.Current.Session["Username"] != null)
+                    {
+                        <li> @Html.ActionLink("Hello " + @HttpContext.Current.Session["Username"].ToString(), "")</li>
+
+                    }
                         <li>  @Html.ActionLink("Logout", "LogOut", "Login", routeValues: null, htmlAttributes: new { title = "Contact informations" })</li>
                 }
 

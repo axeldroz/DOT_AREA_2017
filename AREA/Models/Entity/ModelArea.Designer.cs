@@ -1,4 +1,4 @@
-﻿// La génération de code T4 est activée pour le modèle 'C:\Users\Simbrams\Source\Repos\AREA\AREA\Models\Entity\ModelArea.edmx'. 
+﻿// La génération de code T4 est activée pour le modèle 'C:\Users\Simbrams\Source\Repos\DOT_AREA_2017\AREA\Models\Entity\ModelArea.edmx'. 
 // Pour activer la génération de code héritée, définissez la valeur de la propriété
 // du concepteur 'Stratégie de génération de code' sur 'ObjectContext hérité'. Cette propriété est disponible dans la fenêtre Propriétés lorsque le modèle
 //  est ouvert dans le concepteur.

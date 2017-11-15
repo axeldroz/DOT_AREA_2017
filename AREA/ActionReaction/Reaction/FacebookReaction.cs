@@ -11,7 +11,7 @@ namespace AREA.Reaction
     public class FacebookReaction : IAreaReaction
     {
         private string _name;
-        private Dictionary<string, TaskFactory<int, string>> _methods; 
+       // private Dictionary<string, TaskFactory<int, string>> _methods; 
 
         public FacebookReaction(string name) : base()
         {
