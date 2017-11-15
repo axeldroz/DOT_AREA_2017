@@ -238,6 +238,8 @@ namespace AREA.Controllers
             {
                 if (db.users.Any(m => m.Email == Email))
                 {
+                    var tmp = await db.users.Where(m => m.Email == Email).FirstOrDefaultAsync();
+                    Session["Username"] = tmp.Name;
                     FormsAuthentication.SetAuthCookie(Email, false);
                     return Redirect(Url.Action("Index", "Home"));
                 }
@@ -278,6 +280,8 @@ namespace AREA.Controllers
                     {
                         db.users.Add(elem);
                         await db.SaveChangesAsync();
+                        var tmp = await db.users.Where(m => m.Email == Email).FirstOrDefaultAsync();
+                        Session["Username"] = tmp.Name;
                         FormsAuthentication.SetAuthCookie(Email, false);
                         return Redirect(Url.Action("Index", "Home"));
                     }
