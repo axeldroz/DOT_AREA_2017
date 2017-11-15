@@ -1,6 +1,9 @@
-﻿using System;
+﻿using AREA.Models.Entity;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace AREA.Action
@@ -11,7 +14,8 @@ namespace AREA.Action
         private Dictionary<string, TaskEventHandler> _reactions;
         public AreaActionReactionManager()
         {
-
+            _actions = new Dictionary<string, TaskEventHandler>();
+            _reactions = new Dictionary<string, TaskEventHandler>();
         }
 
         public void InitAction()
@@ -47,6 +51,23 @@ namespace AREA.Action
             //string reactionName = ""; Get From DB
             //FacebookAction action = new FacebookAction(token, actionName, new Reaction.FacebookReaction(reactionName));
             // foreach DateBase
+        }
+
+        public async Task<int> RunAsync()
+        {
+            using (AreaEntities db = new AreaEntities())
+            {
+                /* get record with where clause */
+                //var user = await db.users.Where(m => m.Email == "bite").FirstOrDefaultAsync();
+                //  {
+
+                //}
+                var actions = await db.users.ToListAsync();
+                foreach (var a in actions)
+                {
+                }
+            }
+                return (0);
         }
     }
 }
