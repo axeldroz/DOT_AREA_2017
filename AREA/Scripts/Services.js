@@ -27,12 +27,12 @@ function ReloadPage(){
 }
 
 function AddElement() {
-    var action = $("#Action");
-    var reaction = $("#Reaction");
+    var action = document.getElementById("Action");
+    var reaction = document.getElementById("Reaction");
 
     var obj = new Object();
-    obj.action = action.option[action.selectedIndex].value;
-    obj.reaction = action;
+    obj.action = $("#Action :selected").val();
+    obj.reaction = $("#Reaction :selected").val();
     $.ajax({
         type: "POST",
         url: "/myservices/addservice",
@@ -43,6 +43,27 @@ function AddElement() {
         success: function (data) {
             if (data.success)
                 console.log("success");
+            else
+                console.log("error");
+        },
+        error: function (data) {
+            console.log("error");
+        },
+    });
+}
+
+function GetElements() {
+    $.ajax({
+        type: "POST",
+        url: "/myservices/getservices",
+        async: true,
+        data: JSON.stringify(obj),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            if (data.success) {
+                console.log("success");
+            }
             else
                 console.log("error");
         },
