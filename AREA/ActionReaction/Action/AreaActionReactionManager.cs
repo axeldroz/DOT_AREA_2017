@@ -16,6 +16,7 @@ namespace AREA.Action
         {
             _actions = new Dictionary<string, TaskEventHandler>();
             _reactions = new Dictionary<string, TaskEventHandler>();
+            Init();
         }
 
         public void InitAction()
@@ -25,7 +26,7 @@ namespace AREA.Action
 
         public void InitReaction()
         {
-            _reactions.Add("PostOnWall", (s, e) => Reaction.AreaReaction.PostOnWall((Reaction.AreaReaction.ReactionArgs)e));
+            _reactions.Add("PostOnWall", (s, e) => Reaction.AreaReaction.PostOnWall((Action.AreaAction.ActionArgs)e));
         }
 
         public void Init()
@@ -44,7 +45,7 @@ namespace AREA.Action
             _actions["ForEver"](this, arg).Start();
         }*/
 
-        public void RunOne(string token_facebook, string token_google, string act, string react)
+        public async Task<int> RunOne(string token_facebook, string token_google, string act, string react)
         {
             AreaAction.ActionArgs arg = new AreaAction.ActionArgs
             {
@@ -53,6 +54,7 @@ namespace AREA.Action
                 TheReaction = _reactions["PostOnWall"]
             };
             _actions["ForEver"](this, arg).Start();
+            return (1);
         }
 
         public void Run()
@@ -80,7 +82,28 @@ namespace AREA.Action
                     RunOne(a.Token_facebook, a.Token_google, a.Action1, a.Reaction);
                 }
             }
-                return (0);
+            return (0);
+        }
+
+        public async Task<int> RunAll()
+        {
+            using (AreaEntities db = new AreaEntities())
+            {
+                /* get record with where clause */
+                //var user = await db.users.Where(m => m.Email == "bite").FirstOrDefaultAsync();
+                //   {
+
+                //}
+                string token = "";
+                var actions = await db.actions.ToListAsync();
+                foreach (var a in actions)
+                {
+                    RunOne(a.Token_facebook, a.Token_google, a.Action1, a.Reaction);
+                }
+            }
+            await Task.Delay(10000);
+            RunAll();
+            return (0);
         }
     }
 }
