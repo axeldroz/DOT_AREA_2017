@@ -14,9 +14,50 @@ namespace AREA.Action
         private Dictionary<string, TaskEventHandler> _reactions;
         public AreaActionReactionManager()
         {
-            _actions = new Dictionary<string, TaskEventHandler>();
-            _reactions = new Dictionary<string, TaskEventHandler>();
+            //_actions = new Dictionary<string, TaskEventHandler>();
+            //_reactions = new Dictionary<string, TaskEventHandler>();
             Init();
+        }
+
+        public static Dictionary<string, TaskEventHandler> GetActionDict()
+        {
+            Dictionary<string, TaskEventHandler>  list = new Dictionary<string, TaskEventHandler>();
+
+            list.Add("ForEver", (s, e) => Action.AreaAction.WaitForNothing((Action.AreaAction.ActionArgs)e));
+            return (list);
+        }
+
+        public static Dictionary<string, TaskEventHandler> GetReactionDict()
+        {
+            Dictionary<string, TaskEventHandler> list = new Dictionary<string, TaskEventHandler>();
+
+            list.Add("PostOnWall", (s, e) => Reaction.AreaReaction.PostOnWall((Action.AreaAction.ActionArgs)e));
+
+            return (list);
+        }
+
+        public static List<string> GetActionNames()
+        {
+            Dictionary<string, TaskEventHandler> dic = GetActionDict();
+            List<string> list = new List<string>();
+
+            foreach (KeyValuePair<string, TaskEventHandler> p in dic)
+            {
+                list.Add(p.Key);
+            }
+            return (list);
+        }
+
+        public static List<string> GetReactionNames()
+        {
+            Dictionary<string, TaskEventHandler> dic = GetReactionDict();
+            List<string> list = new List<string>();
+
+            foreach (KeyValuePair<string, TaskEventHandler> p in dic)
+            {
+                list.Add(p.Key);
+            }
+            return (list);
         }
 
         public void InitAction()
@@ -31,8 +72,10 @@ namespace AREA.Action
 
         public void Init()
         {
-            InitAction();
-            InitReaction();
+            //InitAction();
+            //InitReaction();
+            _actions = GetActionDict();
+            _reactions = GetReactionDict();
         }
 
         /*public void RunExample()
