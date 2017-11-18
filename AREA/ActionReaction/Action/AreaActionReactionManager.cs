@@ -59,7 +59,7 @@ namespace AREA.Action
             {
                 /* get record with where clause */
                 //var user = await db.users.Where(m => m.Email == "bite").FirstOrDefaultAsync();
-                //  {
+                //   {
 
                 //}
                 var actions = await db.users.ToListAsync();
