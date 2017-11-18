@@ -34,11 +34,22 @@ namespace AREA.Action
             InitReaction();
         }
 
-        public void RunExample()
+        /*public void RunExample()
         {
             AreaAction.ActionArgs arg = new AreaAction.ActionArgs
             {
                 Token = "",
+                TheReaction = _reactions["PostOnWall"]
+            };
+            _actions["ForEver"](this, arg).Start();
+        }*/
+
+        public void RunOne(string token_facebook, string token_google, string act, string react)
+        {
+            AreaAction.ActionArgs arg = new AreaAction.ActionArgs
+            {
+                Token_facebook = token_facebook,
+                Token_google = token_google,
                 TheReaction = _reactions["PostOnWall"]
             };
             _actions["ForEver"](this, arg).Start();
@@ -62,9 +73,11 @@ namespace AREA.Action
                 //   {
 
                 //}
-                var actions = await db.users.ToListAsync();
+                string token = "";
+                var actions = await db.actions.ToListAsync();
                 foreach (var a in actions)
                 {
+                    RunOne(a.Token_facebook, a.Token_google, a.Action1, a.Reaction);
                 }
             }
                 return (0);

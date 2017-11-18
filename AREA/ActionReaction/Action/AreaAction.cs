@@ -11,14 +11,15 @@ namespace AREA.Action
     {
         public class ActionArgs : EventArgs
         {
-            public string Token { get; set; }
+            public string Token_facebook { get; set; }
+            public string Token_google { get; set; }
             public TaskEventHandler TheReaction { get; set; }
             public string Arg1 { get; set; }
             public string Arg2 { get; set; }
         }
         public static async Task<int> WaitForNothing(ActionArgs args)
         {
-            FacebookClient fb = new FacebookClient(args.Token);
+            FacebookClient fb = new FacebookClient(args.Token_facebook);
 
             fb.GetCompleted +=
                 (o, e) =>

@@ -85,7 +85,7 @@ namespace AREA.Controllers
                         Reaction = reaction,
                         Date = DateTime.Now,
                         Id_user = user,
-                        Token = db.users.Where(m => m.Id == user).FirstOrDefault().Token_facebook;
+                        Token_facebook = db.users.Where(m => m.Id == user).FirstOrDefault().Token_facebook
                     };
                     db.actions.Add(elem);
                     db.SaveChanges();

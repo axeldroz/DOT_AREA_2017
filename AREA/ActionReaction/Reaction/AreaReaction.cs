@@ -11,13 +11,14 @@ namespace AREA.Reaction
     {
         public class ReactionArgs : EventArgs
         {
-            public string Token { get; set; }
+            public string Token_facebook { get; set; }
+            public string Token_google { get; set; }
             public string Arg1 { get; set; }
             public string Arg2 { get; set; }
         }
         public static async Task<int> PostOnWall(ReactionArgs args)
         {
-            var fb = new FacebookClient(args.Token);
+            var fb = new FacebookClient(args.Token_facebook);
 
             fb.PostCompleted += (o, e) => {
                 if (e.Error == null)
