@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="376693fbfa8a496fbb790321180fdea6" Name="Diagram1" >
         <EntityTypeShape EntityType="AreaModel.user" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="AreaModel.action" Width="1.5" PointX="0.5" PointY="0.875" />
+        <EntityTypeShape EntityType="AreaModel.action" Width="1.5" PointX="0.875" PointY="1.625" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

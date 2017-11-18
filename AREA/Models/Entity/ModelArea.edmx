@@ -11,7 +11,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Id_user" Type="int" />
-          <Property Name="Token_faebook" Type="varchar" MaxLength="500" />
+          <Property Name="Token_facebook" Type="varchar" MaxLength="500" />
           <Property Name="Action" Type="nvarchar" MaxLength="50" />
           <Property Name="Reaction" Type="nvarchar" MaxLength="50" />
           <Property Name="Date" Type="datetime" />
@@ -58,7 +58,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Id_user" Type="Int32" />
-          <Property Name="Token_faebook" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Token_facebook" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="Action1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Reaction" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" Precision="3" />
@@ -91,7 +91,7 @@
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Reaction" ColumnName="Reaction" />
                 <ScalarProperty Name="Action1" ColumnName="Action" />
-                <ScalarProperty Name="Token_faebook" ColumnName="Token_faebook" />
+                <ScalarProperty Name="Token_facebook" ColumnName="Token_facebook" />
                 <ScalarProperty Name="Id_user" ColumnName="Id_user" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
