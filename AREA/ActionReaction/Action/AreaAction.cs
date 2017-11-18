@@ -27,6 +27,7 @@ namespace AREA.Action
                     dynamic result = e.GetResultData();
                     if (e.Error == null)
                     {
+                        args.Arg1 = result.message;
                         args.TheReaction(o, args);
                     }
                 };

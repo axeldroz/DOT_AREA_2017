@@ -16,7 +16,7 @@ namespace AREA.Reaction
             public string Arg1 { get; set; }
             public string Arg2 { get; set; }
         }
-        public static async Task<int> PostOnWall(ReactionArgs args)
+        public static async Task<int> PostOnWall(Action.AreaAction.ActionArgs args)
         {
             var fb = new FacebookClient(args.Token_facebook);
 
@@ -29,7 +29,7 @@ namespace AREA.Reaction
             };
 
             var parameters = new Dictionary<string, object>();
-            parameters["message"] = " Hello";
+            parameters["message"] = " Hello" + args.Arg1;
             await fb.PostTaskAsync("me/feed", parameters);
             return (0);
         }

@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using AREA.Action;
 
 namespace AREA
 {
@@ -20,6 +21,9 @@ namespace AREA
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             Task task = new Task(() => AuthConfig.RegisterAuth());
             task.Start();
+            AreaActionReactionManager mngr = new AreaActionReactionManager();
+            mngr.RunAsync();
+
         }
     }
 }

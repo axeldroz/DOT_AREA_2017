@@ -14,8 +14,50 @@ namespace AREA.Action
         private Dictionary<string, TaskEventHandler> _reactions;
         public AreaActionReactionManager()
         {
-            _actions = new Dictionary<string, TaskEventHandler>();
-            _reactions = new Dictionary<string, TaskEventHandler>();
+            //_actions = new Dictionary<string, TaskEventHandler>();
+            //_reactions = new Dictionary<string, TaskEventHandler>();
+            Init();
+        }
+
+        public static Dictionary<string, TaskEventHandler> GetActionDict()
+        {
+            Dictionary<string, TaskEventHandler>  list = new Dictionary<string, TaskEventHandler>();
+
+            list.Add("ForEver", (s, e) => Action.AreaAction.WaitForNothing((Action.AreaAction.ActionArgs)e));
+            return (list);
+        }
+
+        public static Dictionary<string, TaskEventHandler> GetReactionDict()
+        {
+            Dictionary<string, TaskEventHandler> list = new Dictionary<string, TaskEventHandler>();
+
+            list.Add("PostOnWall", (s, e) => Reaction.AreaReaction.PostOnWall((Action.AreaAction.ActionArgs)e));
+
+            return (list);
+        }
+
+        public static List<string> GetActionNames()
+        {
+            Dictionary<string, TaskEventHandler> dic = GetActionDict();
+            List<string> list = new List<string>();
+
+            foreach (KeyValuePair<string, TaskEventHandler> p in dic)
+            {
+                list.Add(p.Key);
+            }
+            return (list);
+        }
+
+        public static List<string> GetReactionNames()
+        {
+            Dictionary<string, TaskEventHandler> dic = GetReactionDict();
+            List<string> list = new List<string>();
+
+            foreach (KeyValuePair<string, TaskEventHandler> p in dic)
+            {
+                list.Add(p.Key);
+            }
+            return (list);
         }
 
         public void InitAction()
@@ -25,13 +67,15 @@ namespace AREA.Action
 
         public void InitReaction()
         {
-            _reactions.Add("PostOnWall", (s, e) => Reaction.AreaReaction.PostOnWall((Reaction.AreaReaction.ReactionArgs)e));
+            _reactions.Add("PostOnWall", (s, e) => Reaction.AreaReaction.PostOnWall((Action.AreaAction.ActionArgs)e));
         }
 
         public void Init()
         {
-            InitAction();
-            InitReaction();
+            //InitAction();
+            //InitReaction();
+            _actions = GetActionDict();
+            _reactions = GetReactionDict();
         }
 
         /*public void RunExample()
@@ -44,7 +88,7 @@ namespace AREA.Action
             _actions["ForEver"](this, arg).Start();
         }*/
 
-        public void RunOne(string token_facebook, string token_google, string act, string react)
+        public async Task<int> RunOne(string token_facebook, string token_google, string act, string react)
         {
             AreaAction.ActionArgs arg = new AreaAction.ActionArgs
             {
@@ -53,6 +97,7 @@ namespace AREA.Action
                 TheReaction = _reactions["PostOnWall"]
             };
             _actions["ForEver"](this, arg).Start();
+            return (1);
         }
 
         public void Run()
@@ -80,7 +125,28 @@ namespace AREA.Action
                     RunOne(a.Token_facebook, a.Token_google, a.Action1, a.Reaction);
                 }
             }
-                return (0);
+            return (0);
+        }
+
+        public async Task<int> RunAll()
+        {
+            using (AreaEntities db = new AreaEntities())
+            {
+                /* get record with where clause */
+                //var user = await db.users.Where(m => m.Email == "bite").FirstOrDefaultAsync();
+                //   {
+
+                //}
+                string token = "";
+                var actions = await db.actions.ToListAsync();
+                foreach (var a in actions)
+                {
+                    RunOne(a.Token_facebook, a.Token_google, a.Action1, a.Reaction);
+                }
+            }
+            await Task.Delay(10000);
+            RunAll();
+            return (0);
         }
     }
 }
