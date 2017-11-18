@@ -5,28 +5,16 @@
 <div id="AddSection">
    <!-- @Html.ActionLink("Service : Write Always on your wall", "PostOnWallForEver"); -->
     <div class="row">
-        <div class="div-inline dropdown" id="Action">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                Action
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" id="ddlAction">
-                <li class="active"><a href="#">Action 1</a></li>
-                <li><a href="#">Action 2</a></li>
-                <li><a href="#">Action 3</a></li>
-            </ul>
-        </div>
-        <div class="div-inline dropdown" id="Reaction">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                Reaction
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" id="ddlReaction">
-                <li class="active"><a href="#">Reaction 1</a></li>
-                <li><a href="#">Reaction 2</a></li>
-                <li><a href="#">Reaction 3</a></li>
-            </ul>
-        </div>
+        <select class="selectpicker" id="Action">
+                <option>Action 1</option>
+                <option>Action 2</option>
+                <option>Action 3</option>
+        </select>
+        <select class="selectpicker" id="Reaction">
+                <option>Reaction 1</option>
+                <option>Reaction 2</option>
+                <option>Reaction 3</option>
+        </select>
         <button type="button" id="AddActionButton" class="div-inline btn btn-default">Add</button>
     </div>
     <div id="Elements">

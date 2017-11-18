@@ -27,11 +27,11 @@ function ReloadPage(){
 }
 
 function AddElement() {
-    var action = $("#Action li.active a").text();
-    var reaction = $("#Reaction li.active a").text();
+    var action = $("#Action");
+    var reaction = $("#Reaction");
 
     var obj = new Object();
-    obj.action = action;
+    obj.action = action.option[action.selectedIndex].value;
     obj.reaction = action;
     $.ajax({
         type: "POST",
