@@ -30,3 +30,15 @@ textarea {
 .dropdown {
     display: inline;
 }
+
+.services {
+    margin: 10px;
+}
+
+html {
+    margin-bottom: 65px
+}
+
+footer {
+    background-color: white;
+}

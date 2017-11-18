@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace AREA.Controllers
 {
@@ -96,6 +97,61 @@ namespace AREA.Controllers
                 throw ex;
             }
             return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public string GetServices()
+        {
+            string result;
+            JavaScriptSerializer jss = new JavaScriptSerializer();
+            try
+            {
+                using (AreaEntities db = new AreaEntities())
+                {
+                    if (Session["Email"] == null)
+                        return "Error";
+                    string Email = Session["Email"].ToString();
+                    int user = db.users.Where(m => m.Email == Email).FirstOrDefault().Id;
+                    var services = db.actions.Where(m => m.Id_user == user).ToList();
+                    result = jss.Serialize(services);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
+        [HttpPost]
+        public String DeleteService(string id)
+        {
+            try
+            {
+                int id_service = Int32.Parse(id);
+                using (AreaEntities db = new AreaEntities())
+                {
+                    if (Session["Email"] == null)
+                        return "Error";
+                    string Email = Session["Email"].ToString();
+                    var service = db.actions.Where(m => m.Id == id_service).FirstOrDefault();
+                    if (service.Equals(null))
+                    {
+                        return "error";
+                    }
+                    else
+                    {
+                        db.actions.Attach(service);
+                        db.actions.Remove(service);
+                        db.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return "success";
         }
     }
 }
