@@ -114,7 +114,7 @@ namespace AREA.Controllers
                 client_id = "790703331101924",
                 redirect_uri = RedirectUri.AbsoluteUri,
                 response_type = "code",
-                scope = "email"
+                scope = "email,publish_actions"
             });
             return (Redirect(loginUrl.AbsoluteUri));
         }
@@ -145,6 +145,10 @@ namespace AREA.Controllers
                 {
                     Session["Username"] = _Name;
                     Session["Email"] = _Email;
+                    db.users.Attach(tmp);
+                    tmp.Token_facebook = accessToken;
+                    db.Entry(tmp).State = EntityState.Modified;
+                    db.SaveChanges();
                     FormsAuthentication.SetAuthCookie(_Email, false);
                     return (RedirectToAction("Index", "Home"));
                 }
@@ -155,7 +159,8 @@ namespace AREA.Controllers
                     {
                         Email = _Email,
                         Name = _Name,
-                        Password = ""
+                        Password = "",
+                        Token_facebook = accessToken
                     };
                     db.users.Add(ToAdd);
                     await db.SaveChangesAsync();

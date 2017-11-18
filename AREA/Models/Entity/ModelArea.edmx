@@ -25,6 +25,8 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="Token_facebook" Type="varchar" MaxLength="200" />
+          <Property Name="Token_google" Type="varchar" MaxLength="200" />
         </EntityType>
         <EntityContainer Name="AreaModelStoreContainer">
           <EntitySet Name="actions" EntityType="Self.actions" Schema="dbo" store:Type="Tables" />
@@ -58,6 +60,8 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Token_facebook" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Token_google" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -81,6 +85,8 @@
           <EntitySetMapping Name="users">
             <EntityTypeMapping TypeName="AreaModel.user">
               <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="Token_google" ColumnName="Token_google" />
+                <ScalarProperty Name="Token_facebook" ColumnName="Token_facebook" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
