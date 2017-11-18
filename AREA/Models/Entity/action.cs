@@ -16,10 +16,11 @@ namespace AREA.Models.Entity
     {
         public int Id { get; set; }
         public Nullable<int> Id_user { get; set; }
-        public string Token { get; set; }
+        public string Token_faebook { get; set; }
         public string Action1 { get; set; }
         public string Reaction { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public string Provider { get; set; }
+        public string Token_google { get; set; }
     }
 }

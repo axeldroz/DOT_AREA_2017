@@ -11,11 +11,12 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Id_user" Type="int" />
-          <Property Name="Token" Type="varchar" MaxLength="500" />
+          <Property Name="Token_faebook" Type="varchar" MaxLength="500" />
           <Property Name="Action" Type="nvarchar" MaxLength="50" />
           <Property Name="Reaction" Type="nvarchar" MaxLength="50" />
           <Property Name="Date" Type="datetime" />
           <Property Name="Provider" Type="varchar" MaxLength="20" />
+          <Property Name="Token_google" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="users">
           <Key>
@@ -25,8 +26,8 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
           <Property Name="Password" Type="nvarchar" MaxLength="50" />
-          <Property Name="Token_facebook" Type="varchar" MaxLength="200" />
-          <Property Name="Token_google" Type="varchar" MaxLength="200" />
+          <Property Name="Token_facebook" Type="varchar" MaxLength="400" />
+          <Property Name="Token_google" Type="varchar" MaxLength="400" />
         </EntityType>
         <EntityContainer Name="AreaModelStoreContainer">
           <EntitySet Name="actions" EntityType="Self.actions" Schema="dbo" store:Type="Tables" />
@@ -37,21 +38,9 @@
     <edmx:ConceptualModels>
       <Schema Namespace="AreaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="AreaEntities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="actions" EntityType="AreaModel.action" />
           <EntitySet Name="users" EntityType="AreaModel.user" />
+          <EntitySet Name="actions" EntityType="AreaModel.action" />
         </EntityContainer>
-        <EntityType Name="action">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Id_user" Type="Int32" />
-          <Property Name="Token" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="Action1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Reaction" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Date" Type="DateTime" Precision="3" />
-          <Property Name="Provider" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="user">
           <Key>
             <PropertyRef Name="Id" />
@@ -60,8 +49,21 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Token_facebook" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Token_google" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Token_facebook" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="Token_google" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="action">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_user" Type="Int32" />
+          <Property Name="Token_faebook" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Action1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Reaction" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Provider" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Token_google" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -69,19 +71,6 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="AreaModelStoreContainer" CdmEntityContainer="AreaEntities" >
-          <EntitySetMapping Name="actions">
-            <EntityTypeMapping TypeName="AreaModel.action">
-              <MappingFragment StoreEntitySet="actions">
-                <ScalarProperty Name="Provider" ColumnName="Provider" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Reaction" ColumnName="Reaction" />
-                <ScalarProperty Name="Action1" ColumnName="Action" />
-                <ScalarProperty Name="Token" ColumnName="Token" />
-                <ScalarProperty Name="Id_user" ColumnName="Id_user" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="users">
             <EntityTypeMapping TypeName="AreaModel.user">
               <MappingFragment StoreEntitySet="users">
@@ -90,6 +79,20 @@
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="actions">
+            <EntityTypeMapping TypeName="AreaModel.action">
+              <MappingFragment StoreEntitySet="actions">
+                <ScalarProperty Name="Token_google" ColumnName="Token_google" />
+                <ScalarProperty Name="Provider" ColumnName="Provider" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Reaction" ColumnName="Reaction" />
+                <ScalarProperty Name="Action1" ColumnName="Action" />
+                <ScalarProperty Name="Token_faebook" ColumnName="Token_faebook" />
+                <ScalarProperty Name="Id_user" ColumnName="Id_user" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
