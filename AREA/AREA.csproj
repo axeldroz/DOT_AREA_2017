@@ -234,7 +234,6 @@
     <Compile Include="ActionReaction\Reaction\FacebookReaction.cs" />
     <Compile Include="ActionReaction\Reaction\AreaReaction.cs" />
     <Compile Include="ActionReaction\Reaction\IAreaReaction.cs" />
-    <Compile Include="ActionReaction\Reaction\TaskFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Area.mdf" />

@@ -22,7 +22,7 @@ namespace AREA
             Task task = new Task(() => AuthConfig.RegisterAuth());
             task.Start();
             AreaActionReactionManager mngr = new AreaActionReactionManager();
-            mngr.RunAsync();
+            mngr.RunAll();
 
         }
     }

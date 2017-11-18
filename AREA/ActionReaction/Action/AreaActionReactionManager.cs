@@ -18,15 +18,17 @@ namespace AREA.Action
             //_reactions = new Dictionary<string, TaskEventHandler>();
             Init();
         }
-
+        /* Actions */
         public static Dictionary<string, TaskEventHandler> GetActionDict()
         {
             Dictionary<string, TaskEventHandler>  list = new Dictionary<string, TaskEventHandler>();
 
             list.Add("ForEver", (s, e) => Action.AreaAction.WaitForNothing((Action.AreaAction.ActionArgs)e));
+            list.Add("WhenLike", (s, e) => Action.AreaAction.WhenLike((Action.AreaAction.ActionArgs)e));
             return (list);
         }
-
+        
+        /* Reactions */
         public static Dictionary<string, TaskEventHandler> GetReactionDict()
         {
             Dictionary<string, TaskEventHandler> list = new Dictionary<string, TaskEventHandler>();
@@ -96,7 +98,7 @@ namespace AREA.Action
                 Token_google = token_google,
                 TheReaction = _reactions["PostOnWall"]
             };
-            _actions["ForEver"](this, arg).Start();
+            _actions["WhenLike"](this, arg).Start();
             return (1);
         }
 
@@ -132,11 +134,6 @@ namespace AREA.Action
         {
             using (AreaEntities db = new AreaEntities())
             {
-                /* get record with where clause */
-                //var user = await db.users.Where(m => m.Email == "bite").FirstOrDefaultAsync();
-                //   {
-
-                //}
                 string token = "";
                 var actions = await db.actions.ToListAsync();
                 foreach (var a in actions)
@@ -145,7 +142,7 @@ namespace AREA.Action
                 }
             }
             await Task.Delay(10000);
-            RunAll();
+            //RunAll();
             return (0);
         }
     }
