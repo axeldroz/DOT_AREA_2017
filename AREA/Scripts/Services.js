@@ -1,6 +1,5 @@
 ﻿$(document).ready(function () {
-    ReloadPage();
-    console.log("ready!");
+    GetActionReaction();
     $("#AddActionButton").click(function () {
         AddElement();
     });
@@ -10,7 +9,61 @@
 
 function ReloadPage() {
     var window = $('#myWindow');
-    window.append('oui');
+}
+
+function GetActionReaction() {
+    var ResultAction = [];
+    $.ajax({
+        type: "POST",
+        url: "/myservices/getaction",
+        async: false,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            if (data != "error") {
+                ResultAction = JSON.parse(JSON.stringify(data));
+                console.log("success");
+            }
+            else if (data == "error")
+                console.log("error");
+        },
+        error: function (data) {
+            console.log("error");
+        },
+    });
+    $.each(ResultAction, function (index, item) {
+        $('#Action').append($('<option>', {
+            value: item,
+            text: item
+        }));
+        console.log(item);
+    });
+    var ResultReaction = [];
+    $.ajax({
+        type: "POST",
+        url: "/myservices/getreaction",
+        async: false,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            if (data != "error") {
+                ResultReaction = JSON.parse(JSON.stringify(data));
+                console.log("success");
+            }
+            else if (data == "error")
+                console.log("error");
+        },
+        error: function (data) {
+            console.log("error");
+        },
+    });
+    $.each(ResultReaction, function (index, item) {
+        $('#Reaction').append($('<option>', {
+            value: item,
+            text: item
+        }));
+        console.log(item);
+    });
 }
 
 function AddElement() {
@@ -66,9 +119,9 @@ function GetElements() {
 function DisplayServices(Services) {
     var elements = ""
     $(Services).each(function (index, value) {
-        elements += `<button type="button" class="services div-inline btn btn-default">` + value.Action1 +`</button>
-        <button type="button" class="services div-inline btn btn-default">` + value.Reaction +`</button>
-        <button type="button" id="`+ value.Id + `" class="services btn btn-danger" onclick="DeleteService(`+ value.Id +`)">Delete</button> <br />`;
+        elements += `<button type="button" class="services div-inline btn btn-default">` + value.Action1 + `</button>
+        <button type="button" class="services div-inline btn btn-default">` + value.Reaction + `</button>
+        <button type="button" id="`+ value.Id + `" class="services btn btn-danger" onclick="DeleteService(` + value.Id + `)">Delete</button> <br />`;
     });
     $("#Elements").html(elements);
 }

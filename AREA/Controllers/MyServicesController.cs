@@ -10,6 +10,7 @@ using System.Web.Script.Serialization;
 
 namespace AREA.Controllers
 {
+    [Authorize]
     public class MyServicesController : Controller
     {
         private string Token = "";
@@ -97,6 +98,50 @@ namespace AREA.Controllers
                 throw ex;
             }
             return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public string GetAction()
+        {
+            string result = null;
+            JavaScriptSerializer jss = new JavaScriptSerializer();
+            try
+            {
+                if (Session["Email"] == null)
+                    return "Error";
+                var ActionName = Action.AreaActionReactionManager.GetActionNames();
+                result = jss.Serialize(ActionName);
+                if (result == null)
+                    return "error";
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
+        }
+
+        [HttpPost]
+        public string GetReaction()
+        {
+            string result = null;
+            JavaScriptSerializer jss = new JavaScriptSerializer();
+            try
+            {
+                if (Session["Email"] == null)
+                    return "Error";
+                var ReactionName = Action.AreaActionReactionManager.GetReactionNames();
+                result = jss.Serialize(ReactionName);
+                if (result == null)
+                    return "error";
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
         }
 
         [HttpPost]
