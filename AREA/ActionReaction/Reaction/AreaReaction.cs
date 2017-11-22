@@ -29,7 +29,7 @@ namespace AREA.Reaction
             };
 
             var parameters = new Dictionary<string, object>();
-            parameters["message"] = " Hello" + args.Arg1;
+            parameters["message"] = " Hello :" + args.Arg1;
             await fb.PostTaskAsync("me/feed", parameters);
             return (0);
         }

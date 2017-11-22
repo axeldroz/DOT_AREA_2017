@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -25,6 +26,7 @@ namespace AREA.Action
 
             list.Add("ForEver", (s, e) => Action.AreaAction.WaitForNothing((Action.AreaAction.ActionArgs)e));
             list.Add("WhenLike", (s, e) => Action.AreaAction.WhenLike((Action.AreaAction.ActionArgs)e));
+            list.Add("WhenComment", (s, e) => Action.AreaAction.WhenCommentInPost((Action.AreaAction.ActionArgs)e));
             return (list);
         }
         
@@ -98,7 +100,7 @@ namespace AREA.Action
                 Token_google = token_google,
                 TheReaction = _reactions["PostOnWall"]
             };
-            _actions["WhenLike"](this, arg).Start();
+            _actions["WhenComment"](this, arg).Start();
             return (1);
         }
 
@@ -134,11 +136,24 @@ namespace AREA.Action
         {
             using (AreaEntities db = new AreaEntities())
             {
-                string token = "";
+                string token = null;
                 var actions = await db.actions.ToListAsync();
-                foreach (var a in actions)
+
+                if (actions.Count > 0)
                 {
-                    RunOne(a.Token_facebook, a.Token_google, a.Action1, a.Reaction);
+                    Debug.WriteLine("actions.Count = " + actions.Count);
+                    foreach (var a in actions)
+                    {
+                        Debug.WriteLine("actions.Id" + a.Id);
+                        Debug.WriteLine("actions.Action" + a.Action1);
+                        Debug.WriteLine("action.Reaction" + a.Reaction);
+                        Debug.WriteLine("action.Token_facebook" + a.Token_facebook);
+                        if (a.Token_facebook != "" && a.Action1 != "" && a.Reaction != "")
+                        {
+                            Debug.WriteLine("HELLO");
+                            RunOne(a.Token_facebook, a.Token_google, a.Action1, a.Reaction);
+                        }
+                    }
                 }
             }
             await Task.Delay(10000);

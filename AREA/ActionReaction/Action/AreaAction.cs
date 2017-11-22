@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Script.Serialization;
 
 namespace AREA.Action
 {
@@ -30,6 +31,28 @@ namespace AREA.Action
                     {
                         args.Arg1 = result.message;
                         args.TheReaction(o, args);
+                    }
+                };
+            await Task.Delay(200);
+            await fb.GetTaskAsync("me/feed");
+            return (0);
+        }
+
+        public static async Task<int> WhenCommentInPost(ActionArgs args)
+        {
+            FacebookClient fb = new FacebookClient(args.Token_facebook);
+            JavaScriptSerializer jss = new JavaScriptSerializer();
+
+            fb.GetCompleted +=
+                (o, e) =>
+                {
+                    dynamic result = (IDictionary<string, object>)e.GetResultData();
+                    if (e.Error == null)
+                    {
+                        Debug.WriteLine("result = ");
+                        args.Arg1 = /*result[0].message + */" OKkkk " + result["data"][0]["message"];
+                        args.TheReaction(o, args);
+                        //Debug.WriteLine("When comment, post : " + result.message);
                     }
                 };
             await Task.Delay(200);
