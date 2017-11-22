@@ -94,13 +94,17 @@ namespace AREA.Action
 
         public async Task<int> RunOne(string token_facebook, string token_google, string act, string react)
         {
+            if (!GetActionNames().Contains(act))
+                throw new Exception("Action not found : could be a wrong name");
+            if (!GetReactionNames().Contains(react))
+                throw new Exception("Reaction not found : could be a wrong name");
             AreaAction.ActionArgs arg = new AreaAction.ActionArgs
             {
                 Token_facebook = token_facebook,
                 Token_google = token_google,
-                TheReaction = _reactions["PostOnWall"]
+                TheReaction = _reactions[react]
             };
-            _actions["WhenComment"](this, arg).Start();
+            _actions[act](this, arg).Start();
             return (1);
         }
 
@@ -148,10 +152,19 @@ namespace AREA.Action
                         Debug.WriteLine("actions.Action" + a.Action1);
                         Debug.WriteLine("action.Reaction" + a.Reaction);
                         Debug.WriteLine("action.Token_facebook" + a.Token_facebook);
+                        Dictionary<string, List<string>> addArgument = new Dictionary<string, List<string>>();
+
                         if (a.Token_facebook != "" && a.Action1 != "" && a.Reaction != "")
                         {
                             Debug.WriteLine("HELLO");
-                            RunOne(a.Token_facebook, a.Token_google, a.Action1, a.Reaction);
+                            try
+                            {
+                                RunOne(a.Token_facebook, a.Token_google, a.Action1, a.Reaction);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("Exception : " + e.Message);
+                            }
                         }
                     }
                 }

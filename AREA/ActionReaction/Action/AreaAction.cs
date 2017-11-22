@@ -41,7 +41,28 @@ namespace AREA.Action
         public static async Task<int> WhenCommentInPost(ActionArgs args)
         {
             FacebookClient fb = new FacebookClient(args.Token_facebook);
+            FacebookClient fb2 = new FacebookClient(args.Token_facebook);
             JavaScriptSerializer jss = new JavaScriptSerializer();
+            
+
+            fb2.GetCompleted +=
+                (o, e) =>
+                {
+                    dynamic result = (IDictionary<string, object>)e.GetResultData();
+                    if (e.Error == null)
+                    {
+                        int nb = 1;
+                        string res = jss.Serialize(result);
+                        if (((JsonArray)result["data"]).Count() > 0)
+                        {
+                            Debug.WriteLine("nb = " + nb);
+                            Debug.WriteLine("json : " + res);
+                            //args.Arg1 = "ok";
+                            args.TheReaction(o, args);
+                            //Debug.WriteLine("When comment, post : " + result.message);
+                        }
+                    }
+                };
 
             fb.GetCompleted +=
                 (o, e) =>
@@ -51,7 +72,9 @@ namespace AREA.Action
                     {
                         Debug.WriteLine("result = ");
                         args.Arg1 = /*result[0].message + */" OKkkk " + result["data"][0]["message"];
-                        args.TheReaction(o, args);
+                        string post_id = result["data"][0]["id"];
+                        fb2.GetTaskAsync(post_id + "/comments");
+                        //args.TheReaction(o, args);
                         //Debug.WriteLine("When comment, post : " + result.message);
                     }
                 };
@@ -70,7 +93,6 @@ namespace AREA.Action
                     dynamic result = e.GetResultData();
                     if (e.Error == null)
                     {
-                        Debug.WriteLine("Last like : " + result.created_time);
                         args.Arg1 = result.message;
                         args.TheReaction(o, args);
                     }
