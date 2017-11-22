@@ -69,15 +69,14 @@ function AddElement() {
     $.ajax({
         type: "POST",
         url: "/myservices/addservice",
-        async: false,
+        async: true,
         data: JSON.stringify(obj),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
             if (data.success)
             {
-                $("#Elements").fadeOut(500);
-                GetElements();
+                console.log('non');
             }
             else
                 console.log("error");
@@ -86,6 +85,9 @@ function AddElement() {
             console.log("error");
         },
     });
+    GetElements();
+    console.log('oui');
+
 }
 
 function GetElements() {
@@ -117,7 +119,8 @@ function DisplayServices(Services) {
         <button type="button" class="services div-inline btn btn-default">` + value.Reaction + `</button>
         <button type="button" id="`+ value.Id + `" class="services btn btn-danger" onclick="DeleteService(` + value.Id + `)">Delete</button> <br />`;
     });
-    $("#Elements").html(elements).fadeIn(500);
+    console.log('appear');
+    $("#Elements").html(elements).hide().fadeIn(500);
 }
 
 function DeleteService(id) {
