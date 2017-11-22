@@ -171,6 +171,7 @@ namespace AREA.Controllers
                 }
             }
         }
+
         public ActionResult LogOut()
         {
             Session["FecebookToken"] = null;

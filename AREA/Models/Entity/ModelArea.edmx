@@ -17,6 +17,7 @@
           <Property Name="Date" Type="datetime" />
           <Property Name="Provider" Type="varchar" MaxLength="20" />
           <Property Name="Token_google" Type="varchar" MaxLength="500" />
+          <Property Name="Last_elem" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="users">
           <Key>
@@ -64,6 +65,7 @@
           <Property Name="Date" Type="DateTime" Precision="3" />
           <Property Name="Provider" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Token_google" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Last_elem" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -86,6 +88,7 @@
           <EntitySetMapping Name="actions">
             <EntityTypeMapping TypeName="AreaModel.action">
               <MappingFragment StoreEntitySet="actions">
+                <ScalarProperty Name="Last_elem" ColumnName="Last_elem" />
                 <ScalarProperty Name="Token_google" ColumnName="Token_google" />
                 <ScalarProperty Name="Provider" ColumnName="Provider" />
                 <ScalarProperty Name="Date" ColumnName="Date" />

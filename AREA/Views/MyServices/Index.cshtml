@@ -5,19 +5,13 @@
 <div id="AddSection">
    <!-- @Html.ActionLink("Service : Write Always on your wall", "PostOnWallForEver"); -->
     <div class="row">
-        <select class="selectpicker" id="Action">
-                @*<option value="Action1" selected="selected">Action 1</option>
-                <option value="Action2">Action 2</option>
-                <option value="Action3">Action 3</option>*@
-        </select>
-        <select class="selectpicker" id="Reaction">
-                @*<option value="Reaction1" selected="selected">Reaction 1</option>
-                <option value="Reaction2">Reaction 2</option>
-                <option value="Reaction3">Reaction 3</option>*@
-        </select>
-        <button type="button" id="AddActionButton" class="div-inline btn btn-default">Add</button>
+        <div class="form-inline">
+            <select class="form-control" id="Action"></select>
+            <select class="form-control" id="Reaction"></select>
+            <button type="button" id="AddActionButton" class="div-inline btn btn-default">Add</button>
+        </div>
     </div>
-    <div id="Elements">
+    <div class="row" id="Elements">
         <!-- JavaScripts generation here in Services -->
     </div>
 </div>

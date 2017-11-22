@@ -6,11 +6,6 @@
     GetElements();
 });
 
-
-function ReloadPage() {
-    var window = $('#myWindow');
-}
-
 function GetActionReaction() {
     var ResultAction = [];
     $.ajax({
@@ -22,7 +17,6 @@ function GetActionReaction() {
         success: function (data) {
             if (data != "error") {
                 ResultAction = JSON.parse(JSON.stringify(data));
-                console.log("success");
             }
             else if (data == "error")
                 console.log("error");
@@ -36,8 +30,8 @@ function GetActionReaction() {
             value: item,
             text: item
         }));
-        console.log(item);
     });
+
     var ResultReaction = [];
     $.ajax({
         type: "POST",
@@ -48,7 +42,6 @@ function GetActionReaction() {
         success: function (data) {
             if (data != "error") {
                 ResultReaction = JSON.parse(JSON.stringify(data));
-                console.log("success");
             }
             else if (data == "error")
                 console.log("error");
@@ -76,13 +69,16 @@ function AddElement() {
     $.ajax({
         type: "POST",
         url: "/myservices/addservice",
-        async: true,
+        async: false,
         data: JSON.stringify(obj),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
             if (data.success)
-                console.log("success");
+            {
+                $("#Elements").fadeOut(500);
+                GetElements();
+            }
             else
                 console.log("error");
         },
@@ -90,7 +86,6 @@ function AddElement() {
             console.log("error");
         },
     });
-    GetElements();
 }
 
 function GetElements() {
@@ -105,7 +100,6 @@ function GetElements() {
             if (data != "error") {
                 Services = JSON.parse(JSON.stringify(data));
                 DisplayServices(Services);
-                console.log("success");
             }
             else if (data == "error")
                 console.log("error");
@@ -123,7 +117,7 @@ function DisplayServices(Services) {
         <button type="button" class="services div-inline btn btn-default">` + value.Reaction + `</button>
         <button type="button" id="`+ value.Id + `" class="services btn btn-danger" onclick="DeleteService(` + value.Id + `)">Delete</button> <br />`;
     });
-    $("#Elements").html(elements);
+    $("#Elements").html(elements).fadeIn(500);
 }
 
 function DeleteService(id) {
@@ -137,7 +131,6 @@ function DeleteService(id) {
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             if (data == "success") {
-                console.log("success");
                 $("#Elements").html("");
                 GetElements();
             }

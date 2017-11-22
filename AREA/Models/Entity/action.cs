@@ -22,5 +22,6 @@ namespace AREA.Models.Entity
         public Nullable<System.DateTime> Date { get; set; }
         public string Provider { get; set; }
         public string Token_google { get; set; }
+        public string Last_elem { get; set; }
     }
 }

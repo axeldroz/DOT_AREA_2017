@@ -17,13 +17,13 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    @if (!HttpContext.Current.User.Identity.IsAuthenticated)
+                    @if (!HttpContext.Current.User.Identity.IsAuthenticated || HttpContext.Current.Session["Username"] == null)
                     {
                         @Html.ActionLink("Login", "Index", "Login", routeValues: null, htmlAttributes: new { title = "Contact informations" })
                     }
                 </li>
 
-                @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                @if (HttpContext.Current.User.Identity.IsAuthenticated && HttpContext.Current.Session["Username"] != null)
                 {
                     if (@HttpContext.Current.Session["Username"] != null && HttpContext.Current.Session["Username"] != null)
                     {

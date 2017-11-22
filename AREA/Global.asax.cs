@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using AREA.Action;
+using AREA.Controllers;
+using System.Web.Security;
 
 namespace AREA
 {
