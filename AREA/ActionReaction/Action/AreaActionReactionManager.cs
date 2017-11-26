@@ -15,8 +15,6 @@ namespace AREA.Action
         private Dictionary<string, TaskEventHandler> _reactions;
         public AreaActionReactionManager()
         {
-            //_actions = new Dictionary<string, TaskEventHandler>();
-            //_reactions = new Dictionary<string, TaskEventHandler>();
             Init();
         }
         /* Actions */
@@ -27,6 +25,7 @@ namespace AREA.Action
             list.Add("ForEver", (s, e) => Action.AreaAction.WaitForNothing((Action.AreaAction.ActionArgs)e));
             list.Add("WhenLike", (s, e) => Action.AreaAction.WhenLike((Action.AreaAction.ActionArgs)e));
             list.Add("WhenComment", (s, e) => Action.AreaAction.WhenCommentInPost((Action.AreaAction.ActionArgs)e));
+            list.Add("WhenNewLikePage", (s, e) => Action.AreaAction.WhenNewLikePage((Action.AreaAction.ActionArgs)e));
             return (list);
         }
         
@@ -36,7 +35,8 @@ namespace AREA.Action
             Dictionary<string, TaskEventHandler> list = new Dictionary<string, TaskEventHandler>();
 
             list.Add("PostOnWall", (s, e) => Reaction.AreaReaction.PostOnWall((Action.AreaAction.ActionArgs)e));
-
+            list.Add("LikeAPost", (s, e) => Reaction.AreaReaction.LikeAPost((Action.AreaAction.ActionArgs)e));
+            list.Add("CommentAPost", (s, e) => Reaction.AreaReaction.CommentAPost((Action.AreaAction.ActionArgs)e));
             return (list);
         }
 
@@ -64,76 +64,27 @@ namespace AREA.Action
             return (list);
         }
 
-        public void InitAction()
-        {
-            _actions.Add("ForEver", (s, e) => Action.AreaAction.WaitForNothing((Action.AreaAction.ActionArgs)e));
-        }
-
-        public void InitReaction()
-        {
-            _reactions.Add("PostOnWall", (s, e) => Reaction.AreaReaction.PostOnWall((Action.AreaAction.ActionArgs)e));
-        }
-
         public void Init()
         {
-            //InitAction();
-            //InitReaction();
             _actions = GetActionDict();
             _reactions = GetReactionDict();
         }
 
-        /*public void RunExample()
+        public async Task<int> RunOne(action act)
         {
-            AreaAction.ActionArgs arg = new AreaAction.ActionArgs
-            {
-                Token = "",
-                TheReaction = _reactions["PostOnWall"]
-            };
-            _actions["ForEver"](this, arg).Start();
-        }*/
-
-        public async Task<int> RunOne(string token_facebook, string token_google, string act, string react)
-        {
-            if (!GetActionNames().Contains(act))
+            if (!GetActionNames().Contains(act.Action1))
                 throw new Exception("Action not found : could be a wrong name");
-            if (!GetReactionNames().Contains(react))
+            if (!GetReactionNames().Contains(act.Reaction))
                 throw new Exception("Reaction not found : could be a wrong name");
             AreaAction.ActionArgs arg = new AreaAction.ActionArgs
             {
-                Token_facebook = token_facebook,
-                Token_google = token_google,
-                TheReaction = _reactions[react]
+                Token_facebook = act.Token_facebook,
+                Token_google = act.Token_google,
+                TheReaction = _reactions[act.Reaction],
+                TheActionDb = act
             };
-            _actions[act](this, arg).Start();
+            _actions[act.Action1](this, arg).Start();
             return (1);
-        }
-
-        public void Run()
-        {
-            //string token = ""; Get From DB
-            //string actionName = ""; Get From DB
-            //string reactionName = ""; Get From DB
-            //FacebookAction action = new FacebookAction(token, actionName, new Reaction.FacebookReaction(reactionName));
-            // foreach DateBase
-        }
-
-        public async Task<int> RunAsync()
-        {
-            using (AreaEntities db = new AreaEntities())
-            {
-                /* get record with where clause */
-                //var user = await db.users.Where(m => m.Email == "bite").FirstOrDefaultAsync();
-                //   {
-
-                //}
-                string token = "";
-                var actions = await db.actions.ToListAsync();
-                foreach (var a in actions)
-                {
-                    RunOne(a.Token_facebook, a.Token_google, a.Action1, a.Reaction);
-                }
-            }
-            return (0);
         }
 
         public async Task<int> RunAll()
@@ -148,10 +99,6 @@ namespace AREA.Action
                     Debug.WriteLine("actions.Count = " + actions.Count);
                     foreach (var a in actions)
                     {
-                        Debug.WriteLine("actions.Id" + a.Id);
-                        Debug.WriteLine("actions.Action" + a.Action1);
-                        Debug.WriteLine("action.Reaction" + a.Reaction);
-                        Debug.WriteLine("action.Token_facebook" + a.Token_facebook);
                         Dictionary<string, List<string>> addArgument = new Dictionary<string, List<string>>();
 
                         if (a.Token_facebook != "" && a.Action1 != "" && a.Reaction != "")
@@ -159,7 +106,7 @@ namespace AREA.Action
                             Debug.WriteLine("HELLO");
                             try
                             {
-                                RunOne(a.Token_facebook, a.Token_google, a.Action1, a.Reaction);
+                                RunOne(a);
                             }
                             catch (Exception e)
                             {
@@ -169,8 +116,8 @@ namespace AREA.Action
                     }
                 }
             }
-            await Task.Delay(10000);
-            //RunAll();
+            await Task.Delay(5000);
+            RunAll();
             return (0);
         }
     }

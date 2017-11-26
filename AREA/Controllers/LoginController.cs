@@ -114,7 +114,7 @@ namespace AREA.Controllers
                 client_id = "790703331101924",
                 redirect_uri = RedirectUri.AbsoluteUri,
                 response_type = "code",
-                scope = "email,publish_actions,user_posts"
+                scope = "email,publish_actions,user_posts,publish_pages,manage_pages,user_likes"
             });
             return (Redirect(loginUrl.AbsoluteUri));
         }
