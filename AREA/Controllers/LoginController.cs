@@ -185,6 +185,7 @@ namespace AREA.Controllers
         public ActionResult Google()
         {
             string provider = "google";
+            // Default password here.
             string returnUrl = "";
             return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
         }
@@ -237,9 +238,7 @@ namespace AREA.Controllers
                 return Redirect(Url.Action("Index", "Login"));
             }
 
-            // User has logged in with provider successfully
             // Check if user is already registered locally
-            //You can call you user data access method to check and create users based on your 
             string Email = null;
             if (Email == null && authResult.ExtraData.ContainsKey("email"))
             {
