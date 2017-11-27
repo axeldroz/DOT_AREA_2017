@@ -111,7 +111,7 @@ namespace AREA.Controllers
             Facebook.FacebookClient fb = new Facebook.FacebookClient();
             var loginUrl = fb.GetLoginUrl(new
             {
-                client_id = "790703331101924",
+                client_id = "<Your application ID>",
                 redirect_uri = RedirectUri.AbsoluteUri,
                 response_type = "code",
                 scope = "email,publish_actions,user_posts,publish_pages,manage_pages,user_likes"
@@ -126,8 +126,8 @@ namespace AREA.Controllers
             dynamic result = await fb.PostTaskAsync("oauth/access_token",
                 new
                 {
-                    client_id = "790703331101924",
-                    client_secret = "555f37fad9618104665ce1c9ada19878",
+                    client_id = "<Your application ID>",
+                    client_secret = "<Your Application password>",
                     redirect_uri = RedirectUri.AbsoluteUri,
                     code = code
                 });
